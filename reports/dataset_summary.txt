@@ -1,0 +1,129 @@
+==================================================
+RAINFALL INTELLIGENCE - DATASET QUALITY SUMMARY
+==================================================
+
+Total Number of Cities: 8
+Cities Profiled: Bengaluru, Chennai, Delhi, Hyderabad, Mumbai, Nagpur, Nashik, Pune
+Total Observations: 32144
+Overall Date Range: 2015-01-01 to 2025-12-31
+
+CITY-WISE SUMMARY STATS:
+--------------------------------------------------
+City: Bengaluru
+  - Record Count: 4018
+  - Date Range: 2015-01-01 to 2025-12-31
+  - Missing Values: 0
+  - Duplicate Records: 0
+  - Negative Rainfall Count: 0
+  - Zero Rainfall Days (Dry Days): 2538 (63.17%)
+  - Rainy Days (> 0 mm): 1480 (36.83%)
+  - Rainfall Statistics:
+      Mean: 3.1353 mm
+      Median: 0.0 mm
+      Std Dev: 9.1514 mm
+      Min / Max: 0.0 / 132.9561 mm
+
+City: Chennai
+  - Record Count: 4018
+  - Date Range: 2015-01-01 to 2025-12-31
+  - Missing Values: 0
+  - Duplicate Records: 0
+  - Negative Rainfall Count: 0
+  - Zero Rainfall Days (Dry Days): 2777 (69.11%)
+  - Rainy Days (> 0 mm): 1241 (30.89%)
+  - Rainfall Statistics:
+      Mean: 4.2458 mm
+      Median: 0.0 mm
+      Std Dev: 15.3906 mm
+      Min / Max: 0.0 / 329.3434 mm
+
+City: Delhi
+  - Record Count: 4018
+  - Date Range: 2015-01-01 to 2025-12-31
+  - Missing Values: 0
+  - Duplicate Records: 0
+  - Negative Rainfall Count: 0
+  - Zero Rainfall Days (Dry Days): 3085 (76.78%)
+  - Rainy Days (> 0 mm): 933 (23.22%)
+  - Rainfall Statistics:
+      Mean: 2.1235 mm
+      Median: 0.0 mm
+      Std Dev: 7.968 mm
+      Min / Max: 0.0 / 109.2491 mm
+
+City: Hyderabad
+  - Record Count: 4018
+  - Date Range: 2015-01-01 to 2025-12-31
+  - Missing Values: 0
+  - Duplicate Records: 0
+  - Negative Rainfall Count: 0
+  - Zero Rainfall Days (Dry Days): 2849 (70.91%)
+  - Rainy Days (> 0 mm): 1169 (29.09%)
+  - Rainfall Statistics:
+      Mean: 2.5645 mm
+      Median: 0.0 mm
+      Std Dev: 8.3101 mm
+      Min / Max: 0.0 / 190.1142 mm
+
+City: Mumbai
+  - Record Count: 4018
+  - Date Range: 2015-01-01 to 2025-12-31
+  - Missing Values: 0
+  - Duplicate Records: 0
+  - Negative Rainfall Count: 0
+  - Zero Rainfall Days (Dry Days): 2609 (64.93%)
+  - Rainy Days (> 0 mm): 1409 (35.07%)
+  - Rainfall Statistics:
+      Mean: 7.6752 mm
+      Median: 0.0 mm
+      Std Dev: 22.6967 mm
+      Min / Max: 0.0 / 273.4122 mm
+
+City: Nagpur
+  - Record Count: 4018
+  - Date Range: 2015-01-01 to 2025-12-31
+  - Missing Values: 0
+  - Duplicate Records: 0
+  - Negative Rainfall Count: 0
+  - Zero Rainfall Days (Dry Days): 2755 (68.57%)
+  - Rainy Days (> 0 mm): 1263 (31.43%)
+  - Rainfall Statistics:
+      Mean: 3.3205 mm
+      Median: 0.0 mm
+      Std Dev: 10.6055 mm
+      Min / Max: 0.0 / 148.2636 mm
+
+City: Nashik
+  - Record Count: 4018
+  - Date Range: 2015-01-01 to 2025-12-31
+  - Missing Values: 0
+  - Duplicate Records: 0
+  - Negative Rainfall Count: 0
+  - Zero Rainfall Days (Dry Days): 2825 (70.31%)
+  - Rainy Days (> 0 mm): 1193 (29.69%)
+  - Rainfall Statistics:
+      Mean: 2.5534 mm
+      Median: 0.0 mm
+      Std Dev: 8.3746 mm
+      Min / Max: 0.0 / 139.4085 mm
+
+City: Pune
+  - Record Count: 4018
+  - Date Range: 2015-01-01 to 2025-12-31
+  - Missing Values: 0
+  - Duplicate Records: 0
+  - Negative Rainfall Count: 0
+  - Zero Rainfall Days (Dry Days): 2775 (69.06%)
+  - Rainy Days (> 0 mm): 1243 (30.94%)
+  - Rainfall Statistics:
+      Mean: 2.6555 mm
+      Median: 0.0 mm
+      Std Dev: 9.171 mm
+      Min / Max: 0.0 / 129.6953 mm
+
+DATA CLEANING STATUS:
+--------------------------------------------------
+  - Duplicates: PASSED
+  - Negative Rainfall: PASSED
+  - Missing Values: PASSED
+  - Date Continuity: PASSED (All cities contain continuous daily records from 2015-01-01 to 2025-12-31)

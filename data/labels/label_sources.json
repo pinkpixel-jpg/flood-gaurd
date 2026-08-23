@@ -1,0 +1,23 @@
+{
+  "policy": {
+    "description": "Only label files registered here may feed supervised training. Unregistered files are rejected outright to prevent fabricated/synthetic labels.",
+    "registration_requires": ["originating_agency_or_dataset", "verification_status", "spatial_method"]
+  },
+  "registered_sources": [
+    {
+      "source_id": "IMD_LOCAL_LOGS_2014_2016",
+      "file": "data/flood_events/pune_flood_events.csv",
+      "origin": "India Meteorological Department / local municipal logs (as delivered with project)",
+      "verification_status": "VERIFIED_HISTORICAL",
+      "spatial_method": "single point coordinate per event (18.641545, 73.918491) mapped to IMD grid cell",
+      "date_columns": {"start": "start_date", "end": "end_date"},
+      "label_column": "flood",
+      "known_limitations": [
+        "5 events only",
+        "all events share one coordinate",
+        "covers 2014-2016 only",
+        "no severity attributes"
+      ]
+    }
+  ]
+}

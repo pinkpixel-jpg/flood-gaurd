@@ -1,0 +1,146 @@
+{
+  "status": "PRODUCTION",
+  "rules_source": "rule_based",
+  "priority": {
+    "order": ["ROUTINE", "ELEVATED", "HIGH", "URGENT"],
+    "base_by_level": {"LOW": "ROUTINE", "MODERATE": "ELEVATED",
+                      "HIGH": "HIGH", "CRITICAL": "URGENT"},
+    "trend_bonus_steps": {
+      "STRONGLY_INCREASING": 1,
+      "INCREASING": 1,
+      "STABLE": 0,
+      "DECREASING": 0,
+      "null": 0
+    },
+    "citizen_report_threshold": 4,
+    "citizen_report_bonus_steps": 1,
+    "note": "final rank = min(last index, base_index + trend_bonus + citizen_bonus); wording is always 'Recommend ...' because the system does not itself deploy/notify"
+  },
+  "rules": [
+    {
+      "rule_id": "RULE_LOW_ROUTINE_MONITOR",
+      "description": "Low risk: routine posture",
+      "condition": {"all": [{"field": "risk_level", "op": "==", "value": "LOW"}]},
+      "action": "Recommend routine monitoring; no urgent intervention required",
+      "explanation": "Risk level is LOW - standard watchkeeping suffices"
+    },
+    {
+      "rule_id": "RULE_MOD_INCREASED_MONITORING",
+      "description": "Moderate risk: tighter monitoring",
+      "condition": {"all": [{"field": "risk_level", "op": "==", "value": "MODERATE"}]},
+      "action": "Recommend increased monitoring frequency of rainfall and local water levels",
+      "explanation": "Moderate risk warrants closer observation than routine"
+    },
+    {
+      "rule_id": "RULE_MOD_PREPARE_RESOURCES_RISING",
+      "description": "Moderate risk but rising: prepare resources",
+      "condition": {"all": [
+        {"field": "risk_level", "op": "==", "value": "MODERATE"},
+        {"field": "risk_trend", "op": "in", "value": ["INCREASING", "STRONGLY_INCREASING"]}
+      ]},
+      "action": "Recommend preparing response resources for possible escalation",
+      "explanation": "Rising trend at MODERATE level justifies advance preparation"
+    },
+    {
+      "rule_id": "RULE_HIGH_INSPECT_DRAINAGE",
+      "description": "High risk: drainage inspection",
+      "condition": {"all": [{"field": "risk_level", "op": "==", "value": "HIGH"}]},
+      "action": "Recommend inspection of drainage choke points and low-lying stretches",
+      "explanation": "High risk raises probability of drainage-related waterlogging"
+    },
+    {
+      "rule_id": "RULE_HIGH_DEPLOY_RESOURCES",
+      "description": "High risk: resource pre-positioning",
+      "condition": {"all": [{"field": "risk_level", "op": "==", "value": "HIGH"}]},
+      "action": "Recommend deployment readiness / pre-positioning of response resources",
+      "explanation": "High risk justifies having resources ready nearby"
+    },
+    {
+      "rule_id": "RULE_HIGH_ADVISORY",
+      "description": "High risk: public advisory",
+      "condition": {"all": [{"field": "risk_level", "op": "==", "value": "HIGH"}]},
+      "action": "Recommend issuing an appropriate public advisory through official channels",
+      "explanation": "High risk merits proactive public communication"
+    },
+    {
+      "rule_id": "RULE_HIGH_MONITOR_VULNERABLE_AREAS",
+      "description": "High risk: vulnerable-area watch",
+      "condition": {"all": [{"field": "risk_level", "op": "==", "value": "HIGH"}]},
+      "action": "Recommend targeted monitoring of known vulnerable low-lying zones",
+      "explanation": "High risk concentrates impact in structurally vulnerable areas"
+    },
+    {
+      "rule_id": "RULE_CRIT_IMMEDIATE_RESPONSE",
+      "description": "Critical risk: immediate response activation",
+      "condition": {"all": [{"field": "risk_level", "op": "==", "value": "CRITICAL"}]},
+      "action": "Recommend immediate activation of response procedures",
+      "explanation": "Critical risk leaves no margin for delayed reaction"
+    },
+    {
+      "rule_id": "RULE_CRIT_EMERGENCY_RESOURCES",
+      "description": "Critical risk: emergency resource deployment",
+      "condition": {"all": [{"field": "risk_level", "op": "==", "value": "CRITICAL"}]},
+      "action": "Recommend deployment of emergency resources at priority locations",
+      "explanation": "Critical risk calls for resources at the most exposed spots first"
+    },
+    {
+      "rule_id": "RULE_CRIT_NOTIFY_DISASTER_MGMT",
+      "description": "Critical risk: notify disaster-management personnel",
+      "condition": {"all": [{"field": "risk_level", "op": "==", "value": "CRITICAL"}]},
+      "action": "Recommend notifying disaster-management personnel through established channels",
+      "explanation": "Critical risk requires institutional awareness beyond this system"
+    },
+    {
+      "rule_id": "RULE_CRIT_URGENT_ADVISORY",
+      "description": "Critical risk: urgent public advisory",
+      "condition": {"all": [{"field": "risk_level", "op": "==", "value": "CRITICAL"}]},
+      "action": "Recommend issuing an urgent public advisory",
+      "explanation": "Critical risk justifies urgent public-facing communication"
+    },
+    {
+      "rule_id": "RULE_CRIT_CONTINUOUS_MONITORING",
+      "description": "Critical risk: continuous monitoring",
+      "condition": {"all": [{"field": "risk_level", "op": "==", "value": "CRITICAL"}]},
+      "action": "Recommend continuous monitoring until conditions ease below CRITICAL",
+      "explanation": "Critical states must be tracked without interruption"
+    },
+    {
+      "rule_id": "RULE_TREND_ESCALATION_RISING",
+      "description": "Rising trend escalates preparedness at HIGH/CRITICAL",
+      "condition": {"all": [
+        {"field": "risk_level", "op": "in", "value": ["HIGH", "CRITICAL"]},
+        {"field": "risk_trend", "op": "in", "value": ["INCREASING", "STRONGLY_INCREASING"]}
+      ]},
+      "action": "Recommend escalating preparedness measures given the rising risk trend",
+      "explanation": "A rising trend at already-elevated levels argues for stronger action than a stable one"
+    },
+    {
+      "rule_id": "RULE_TREND_DECREASING_DOWNGRADE_WATCH",
+      "description": "Falling trend allows step-down of special measures",
+      "condition": {"all": [
+        {"field": "risk_trend", "op": "==", "value": "DECREASING"},
+        {"field": "risk_level", "op": "not_in", "value": ["CRITICAL"]}
+      ]},
+      "action": "Recommend maintaining only the standard monitoring cycle as conditions improve",
+      "explanation": "Improving trend with non-critical level reduces need for extraordinary measures"
+    },
+    {
+      "rule_id": "RULE_CITIZEN_REPORTS_VERIFY",
+      "description": "Any citizen reports: field verification as evidence",
+      "condition": {"all": [
+        {"field": "citizen_reports", "op": ">=", "value": 1}
+      ]},
+      "action": "Recommend field verification of the citizen-reported incident(s) and inclusion as contextual evidence",
+      "explanation": "Citizen reports are contextual signals that deserve on-ground confirmation, not automatic truth"
+    },
+    {
+      "rule_id": "RULE_CITIZEN_REPORTS_CLUSTER_ESCALATE",
+      "description": "Clustered citizen reports escalate priority",
+      "condition": {"all": [
+        {"field": "citizen_reports", "op": ">=", "value": 4}
+      ]},
+      "action": "Recommend treating the clustered citizen reports as priority evidence for inspection resourcing",
+      "explanation": "Multiple independent reports in one zone indicate a probable real incident pattern"
+    }
+  ]
+}

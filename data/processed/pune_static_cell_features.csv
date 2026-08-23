@@ -1,0 +1,5 @@
+Grid_ID,Latitude,Longitude,elevation_mean_m,elevation_min_m,elevation_max_m,elevation_valid_px,slope_mean_deg,slope_min_deg,slope_max_deg,slope_valid_px,built_up_pct,vegetation_pct,water_cover_pct,cropland_pct,lc_valid_px,distance_to_nearest_waterway_m,waterway_length_m,distance_to_nearest_drainage_m,drainage_length_m,road_density,osm_road_status,flood_event_count_verified
+PUNE_G001,18.5,73.75,652.25,527.0,1137.0,810900,7.4156,0.0,56.9701,810900,20.8507,61.7031,2.1398,14.1528,9000000,113.71,363179.83,4581.5,4591.21,,UNAVAILABLE,0
+PUNE_G002,18.5,74.0,635.3,502.0,1108.0,729810,4.24,0.0,50.8169,729810,19.9285,47.5209,0.7497,29.5589,8100000,763.9,190960.37,7308.81,22556.1,,UNAVAILABLE,0
+PUNE_G003,18.75,73.75,601.79,549.0,920.0,405900,3.1524,0.0,42.2372,405900,25.5631,41.557,0.639,29.3878,4500000,345.3,122091.9,14617.78,0.0,,UNAVAILABLE,0
+PUNE_G004,18.75,74.0,585.54,511.0,707.0,365310,3.3474,0.0,38.8688,365310,7.828,39.6359,1.2211,50.0111,4050000,1292.76,121974.66,20104.43,0.0,,UNAVAILABLE,5

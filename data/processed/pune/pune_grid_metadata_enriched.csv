@@ -1,0 +1,5 @@
+Grid_ID,Latitude,Longitude,Elevation_m,Slope_deg,Aspect_deg,Land_Cover,Built_up_Percentage,Distance_to_Drainage_m,Distance_to_Water_Bodies_m,Population_Density_per_km2
+PUNE_G001,18.5,73.75,658.6666870117188,4.264394760131836,240.0,Urban_Dense,85.0,150.0,300.0,14500
+PUNE_G002,18.5,74.0,545.6666870117188,1.6291338205337524,90.0,Urban_Dense,85.0,450.0,950.0,6800
+PUNE_G003,18.75,73.75,650.0,7.8,270.0,Vegetation_Hilly,15.0,800.0,1500.0,1200
+PUNE_G004,18.75,74.0,615.0,1.5,180.0,Agriculture_Plains,25.0,350.0,200.0,2200

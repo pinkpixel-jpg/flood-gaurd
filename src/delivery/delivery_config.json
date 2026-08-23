@@ -1,0 +1,59 @@
+{
+  "system": "Pune FloodShield",
+  "mode": "HISTORICAL_REPLAY",
+
+  "zone_display_names": {
+    "PUNE_G001": "West-Central Pune",
+    "PUNE_G002": "East Pune",
+    "PUNE_G003": "North-West Pune",
+    "PUNE_G004": "North-East Pune"
+  },
+  "zone_names_note": "Presentation labels for dashboard display only; NOT administrative ward boundaries.",
+
+  "routing": {
+    "status": "UNAVAILABLE",
+    "reason": "Complete road network unavailable",
+    "capability_note": "Safe-route suggestions activate automatically once a verified full road network is integrated."
+  },
+
+  "citizen_reporting": {
+    "enabled": true,
+    "store": "data/reports/citizen_reports.csv",
+    "report_types": ["WATERLOGGING", "FLOODING", "BLOCKED_DRAIN", "OTHER"],
+    "statuses": ["SUBMITTED", "VERIFIED", "REJECTED"]
+  },
+
+  "public_advisories_by_level": {
+    "LOW": "Conditions are normal. No action needed.",
+    "MODERATE": "Stay aware of weather updates; avoid waterlogged stretches if you see them.",
+    "HIGH": "Avoid low-lying areas and follow official advisories today.",
+    "CRITICAL": "Stay indoors if safe, avoid flooded areas, and follow emergency advisories."
+  },
+
+  "roles": ["PUBLIC", "MNC", "DISASTER"],
+  "mnc_roles": ["MNC", "DISASTER"],
+
+  "checklist_by_priority": {
+    "ROUTINE": [
+      "Confirm routine monitoring cycle completed"
+    ],
+    "ELEVATED": [
+      "Increase monitoring cadence",
+      "Review drainage hotspot list",
+      "Brief field volunteers on conditions"
+    ],
+    "HIGH": [
+      "Inspect drainage choke points",
+      "Verify response-resource readiness",
+      "Draft public advisory",
+      "Watch known vulnerable low-lying zones"
+    ],
+    "URGENT": [
+      "Activate response procedures",
+      "Position emergency resources at priority locations",
+      "Notify disaster-management contacts",
+      "Publish urgent public advisory",
+      "Maintain continuous monitoring until stand-down"
+    ]
+  }
+}

@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alerts — FloodGuard Pune</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="alerts">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div id="curtain"><span class="curtain-mark mono">FloodGuard · Pune</span></div>
+
+<div class="bg-stack" aria-hidden="true">
+  <canvas id="bg3d"></canvas>
+  <div class="bg-grid"></div>
+  <div class="vignette"></div>
+</div>
+
+<header class="site-header">
+  <a class="brand" href="index.html" aria-label="FloodGuard home">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 100 128"><path d="M50 4 C58 26 90 54 90 84 A40 40 0 1 1 10 84 C10 54 42 26 50 4 Z" fill="none" stroke="#FFD166" stroke-width="7"/></svg>
+    </span>
+    <span>
+      <span class="brand-name">Flood<b>Guard</b></span>
+      <span class="brand-sub mono">Pune · Flood Intelligence</span>
+    </span>
+  </a>
+  <nav class="nav-links" aria-label="Primary">
+    <a class="nav-link" href="live-map.html">Live Map</a>
+    <a class="nav-link" href="analyze.html">Analyze Risk</a>
+    <a class="nav-link" href="why.html">Why</a>
+    <a class="nav-link" href="forecast.html">Forecast</a>
+    <a class="nav-link" href="routes.html">Routes</a>
+    <a class="nav-link" href="actions.html">Actions</a>
+    <a class="nav-link" href="history.html">History</a>
+    <a class="nav-link nav-cta" href="alerts.html" aria-current="page">Alerts</a>
+  </nav>
+</header>
+
+<main id="main">
+
+  <div class="content-wrap stack"></div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-base" style="max-width:none">
+    <span class="mono">© <span class="js-year">2026</span> FloodGuard AI · Pune</span>
+  </div>
+</footer>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/pages.js"></script>
+<script src="js/background.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

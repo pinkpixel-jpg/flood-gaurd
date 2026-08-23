@@ -1,0 +1,57 @@
+======================================================================
+VALIDATION CHECKS
+======================================================================
+duplicate Date+Grid_ID          : 0
+flood_event_active used as input : NO (asserted in feature_preparation)
+road_density used as input       : NO (asserted in feature_preparation)
+infinite feature values          : 0 (asserted)
+scores rows                      : 16072 (expected 16072)
+======================================================================
+HISTORICAL EVENT REPLAY (5 verified event-days; unsupervised model)
+Model never used flood labels; event days were EXCLUDED from fit.
+======================================================================
+      Date   Grid_ID  ml_anomaly_score_0_100  anomaly_percentile  rank_global  rank_in_grid  top1pct  top5pct  top10pct  baseline_rainfall7d_percentile  baseline_rank_global
+2015-06-23 PUNE_G004                   82.94                  82         2742           792    False    False     False                           87.84                  1931
+2015-07-20 PUNE_G004                   56.55                  56         6984          1981    False    False     False                           64.12                  5743
+2016-07-01 PUNE_G004                   51.68                  51         7767          2165    False    False     False                           71.63                  4536
+2016-07-02 PUNE_G004                   71.81                  71         4532          1301    False    False     False                           74.31                  4105
+2016-07-03 PUNE_G004                   91.74                  91         1328           373    False    False      True                           83.75                  2588
+
+event-days flagged: top1%=0/5  top5%=0/5  top10%=1/5
+Spearman(IF score, rainfall_7d) full record : 0.744
+Spearman(IF vs baseline) on 5 event-days    : 0.800
+
+NOTE: n=5 event-days -> NO statistically meaningful accuracy metrics are
+possible or claimed. This is qualitative replay evidence only.
+
+======================================================================
+PER-GRID ANALYSIS
+======================================================================
+  grid_id  n_rows  score_mean  score_p95  score_max  days_in_global_top1pct                            top3_most_anomalous_dates
+PUNE_G001    4018       52.61      96.06     100.00                      60 2024-07-26 (100); 2024-07-25 (100); 2024-09-26 (100)
+PUNE_G002    4018       43.21      91.31      99.90                      15 2019-09-26 (100); 2022-10-18 (100); 2020-10-15 (100)
+PUNE_G003    4018       49.43      95.18      99.99                      48 2024-07-26 (100); 2022-07-15 (100); 2024-07-25 (100)
+PUNE_G004    4018       54.75      95.38      99.91                      39 2019-07-28 (100); 2019-07-30 (100); 2024-07-26 (100)
+
+SAME-DATE CROSS-GRID SPREAD on each grid's most anomalous day
+(hyperlocal concept: identical regional weather -> different scores):
+  2024-07-26 (triggered by PUNE_G001):
+     PUNE_G001  score=100.00  rain1d= 56.20mm
+     PUNE_G002  score= 99.42  rain1d= 36.23mm
+     PUNE_G003  score= 99.99  rain1d= 50.16mm
+     PUNE_G004  score= 99.80  rain1d= 36.25mm
+  2019-09-26 (triggered by PUNE_G002):
+     PUNE_G001  score= 99.85  rain1d= 57.68mm
+     PUNE_G002  score= 99.90  rain1d= 89.62mm
+     PUNE_G003  score= 96.06  rain1d= 14.88mm
+     PUNE_G004  score= 95.33  rain1d= 14.77mm
+  2024-07-26 (triggered by PUNE_G003):
+     PUNE_G001  score=100.00  rain1d= 56.20mm
+     PUNE_G002  score= 99.42  rain1d= 36.23mm
+     PUNE_G003  score= 99.99  rain1d= 50.16mm
+     PUNE_G004  score= 99.80  rain1d= 36.25mm
+  2019-07-28 (triggered by PUNE_G004):
+     PUNE_G001  score= 99.46  rain1d= 32.77mm
+     PUNE_G002  score= 97.92  rain1d= 23.84mm
+     PUNE_G003  score= 99.96  rain1d= 95.44mm
+     PUNE_G004  score= 99.91  rain1d= 62.53mm

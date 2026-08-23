@@ -1,0 +1,33 @@
+==================================================
+PUNE HYPERLOCAL SPATIAL DATASET - VALIDATION REPORT
+==================================================
+
+Validation Status: PASSED
+
+SPATIAL CHECKS SUMMARY:
+  - Number of grid cells: 4 (Expected: 4) -> PASSED
+  - Latitude range: 18.5 to 18.75
+  - Longitude range: 73.75 to 74.0
+  - Number of unique dates: 4018 (Expected: 4018) -> PASSED
+  - Records per grid cell: PASSED
+      * PUNE_G001: 4018 records
+      * PUNE_G002: 4018 records
+      * PUNE_G003: 4018 records
+      * PUNE_G004: 4018 records
+  - Missing core values: 0 -> PASSED
+  - Duplicate grid-date pairs: 0 -> PASSED
+  - Negative rainfall count: 0 -> PASSED
+  - Date continuity: PASSED
+  - Infinite values check: 0 -> PASSED
+  - Feature NaN bounds check: PASSED
+
+==================================================
+REFERENCE PUNE VALIDATION (LEVEL 1 VS LEVEL 2):
+==================================================
+Nearest grid found: YES
+Grid ID matched: PUNE_G001
+Grid latitude: 18.50
+Grid longitude: 73.75
+Records compared: 4018
+Mismatch count: 0
+Validation: PASSED

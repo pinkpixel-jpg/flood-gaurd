@@ -1,0 +1,11 @@
+Reference grid:
+Latitude = 18.50
+Longitude = 73.75
+
+Reference records = 4018
+Spatial records = 4018
+
+Date mismatches = 0
+Rainfall mismatches = 0
+
+Validation = PASSED

@@ -1,0 +1,44 @@
+{
+  "version": "v1",
+  "mode": "HISTORICAL_REPLAY",
+  "disclaimer": "Environmental exposure/proxy indicators (0-100). NOT temperatures, NOT reservoir storage, NOT flood/water-supply probabilities.",
+
+  "telemetry_status": {
+    "temperature_telemetry": "UNAVAILABLE",
+    "reservoir_storage_telemetry": "UNAVAILABLE"
+  },
+
+  "heat": {
+    "type": "EXPOSURE_PROXY",
+    "why_proxy": "No temperature telemetry exists in the project. Score measures urban surface exposure (built-up vs vegetation) from real ESA WorldCover fractions - it is NOT measured heat.",
+    "normalization": "minmax_0_100_across_the_4_cells",
+    "weights": {
+      "built_up_higher_is_hotter": {
+        "source": "built_up_pct",
+        "direction": "higher_more_exposure",
+        "weight": 0.6
+      },
+      "vegetation_lower_is_hotter": {
+        "source": "vegetation_pct",
+        "direction": "lower_more_exposure",
+        "weight": 0.4
+      }
+    },
+    "levels": {"LOW": {"min": 0, "max_exclusive": 40},
+               "MODERATE": {"min": 40, "max_exclusive": 65},
+               "HIGH": {"min": 65, "max_exclusive": 100.0001}}
+  },
+
+  "water": {
+    "type": "WATER_DEFICIT_PROXY",
+    "why_proxy": "No reservoir/storage/supply telemetry exists. Score compares recent 30-day rainfall against the zone's own prior-years climatology (leak-safe feature hist_mean_prior_years_mm x 30 from the frozen dataset). Meteorological drought signal ONLY.",
+    "expected_30d_formula": "30 * hist_mean_prior_years_mm",
+    "deficit_ratio_formula": "clamp(1 - rainfall_30d / expected_30d, 0, 1)",
+    "score_formula": "deficit_ratio * 100",
+    "missing_handling": "2015 rows have no prior-year baseline and the first 29 days lack a complete 30-day window -> score/level returned as null with explanation (never imputed)",
+    "levels": {"LOW": {"min": 0, "max_exclusive": 30},
+               "MODERATE": {"min": 30, "max_exclusive": 60},
+               "HIGH": {"min": 60, "max_exclusive": 100.0001}},
+    "interpretation_note": "HIGH = strong meteorological deficit (dry spell vs own climatology), NOT empty reservoirs"
+  }
+}

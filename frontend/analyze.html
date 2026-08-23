@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analyze Risk — FloodGuard Pune</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* page-local additions reusing existing palette */
+.fg-result-card{background:rgba(34,48,58,.55);border:1px solid var(--line);
+  border-radius:16px;padding:22px;margin-bottom:22px}
+.fg-result-card h3{margin-bottom:12px;letter-spacing:-.01em}
+.fg-kv{display:flex;justify-content:space-between;gap:14px;padding:7px 0;
+  border-bottom:1px dashed rgba(202,210,197,.14)}
+.fg-kv:last-child{border-bottom:none}
+.fg-kv b{color:#FFD166}
+.fg-bar{height:10px;border-radius:999px;background:rgba(202,210,197,.12);
+  overflow:hidden;margin-top:6px}
+.fg-bar>i{display:block;height:100%;border-radius:999px;
+  background:linear-gradient(90deg,#2ecc71,#f1c40f 60%,#e74c3c)}
+.fg-summary{border:2px solid #FFD166;border-radius:18px;padding:26px}
+.fg-disclosure{font-size:.85rem;color:rgba(202,210,197,.75)}
+.fg-badge-replay{display:inline-block;background:#f1c40f;color:#18211F;
+  font-weight:700;border-radius:999px;padding:5px 14px;font-size:.8rem}
+</style>
+</head>
+<body data-page="analyze">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div id="curtain"><span class="curtain-mark mono">FloodGuard · Pune</span></div>
+
+<div class="bg-stack" aria-hidden="true">
+  <canvas id="bg3d"></canvas>
+  <div class="bg-grid"></div>
+  <div class="vignette"></div>
+</div>
+
+<header class="site-header">
+  <a class="brand" href="index.html" aria-label="FloodGuard home">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 100 128"><path d="M50 4 C58 26 90 54 90 84 A40 40 0 1 1 10 84 C10 54 42 26 50 4 Z" fill="none" stroke="#FFD166" stroke-width="7"/></svg>
+    </span>
+    <span>
+      <span class="brand-name">Flood<b>Guard</b></span>
+      <span class="brand-sub mono">Pune · Flood Intelligence</span>
+    </span>
+  </a>
+  <nav class="nav-links" aria-label="Primary">
+    <a class="nav-link" href="live-map.html">Live Map</a>
+    <a class="nav-link" href="why.html">Why</a>
+    <a class="nav-link nav-cta" href="analyze.html" aria-current="page">Analyze Risk</a>
+    <a class="nav-link" href="forecast.html">Forecast</a>
+    <a class="nav-link" href="routes.html">Routes</a>
+    <a class="nav-link" href="actions.html">Actions</a>
+    <a class="nav-link" href="history.html">History</a>
+    <a class="nav-link" href="alerts.html">Alerts</a>
+  </nav>
+</header>
+
+<main id="main">
+
+  <section class="page-hero">
+    <p class="crumb mono" data-reveal><a href="index.html">Home</a> / Risk Analysis</p>
+    <h1 data-reveal>Check Zone <em>Risk</em>.</h1>
+    <p class="lede" data-reveal>Pick a zone and a date. Historical dates
+    replay verified data; dates beyond the dataset show a damped prediction
+    signal. The backend runs vulnerability, dynamic risk, prevention and
+    environmental analysis — then explains the result.</p>
+  </section>
+  <hr class="page-rule">
+
+  <div class="content-wrap stack">
+
+    <!-- INPUT FORM -->
+    <section class="panel reveal-block" id="fg-analyze-form-panel">
+      <div class="panel-head">
+        <h3>Risk analysis inputs</h3>
+      </div>
+      <form class="sub-form" style="padding:20px;flex-wrap:wrap;gap:10px" id="fg-analyze-form">
+        <select id="fa-grid" required aria-label="Select zone"></select>
+        <input type="date" id="fa-date" required min="2015-01-01" max="2026-03-31"
+               value="2024-07-15" aria-label="Date">
+        <input type="time" id="fa-time" value="14:00" step="900"
+               aria-label="Time">
+        <button class="btn" type="submit">Analyze Risk</button>
+        <button class="btn btn-ghost" type="button" id="fa-demo2">Load Scenario 2</button>
+        <button class="btn btn-ghost" type="button" id="fa-demo">Load Scenario 1</button>
+      </form>
+      <p class="form-note" style="padding:0 20px 16px">
+        Select a zone and date, then click Analyze Risk.
+        <span id="fg-event-shortcuts"></span>
+      </p>
+    </section>
+
+    <!-- RESULT AREA -->
+    <div id="fg-analyze-results" aria-live="polite"></div>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-base" style="max-width:none">
+    <span class="mono">© <span class="js-year">2026</span> FloodGuard AI · Pune</span>
+    <nav class="footer-nav mono">
+      <a href="index.html">Home</a>
+      <a href="live-map.html">Live Map</a>
+      <a href="alerts.html">Alerts</a>
+    </nav>
+  </div>
+</footer>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/pages.js"></script>
+<script src="js/background.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

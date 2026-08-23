@@ -1,0 +1,5 @@
+Grid_ID,Latitude,Longitude,Mean_Rainfall_mm,Total_Rainfall_mm,Maximum_Daily_Rainfall_mm,Rainy_Days,Dry_Days,Heavy_Rainfall_Days,Extreme_Rainfall_Days,Longest_Dry_Spell
+PUNE_G001,18.5,73.75,2.6555,10669.81,129.7,1243,2775,17,2,211
+PUNE_G002,18.5,74.0,2.1551,8659.31,101.74,1262,2756,5,0,206
+PUNE_G003,18.75,73.75,2.5753,10347.47,95.44,1281,2737,11,0,214
+PUNE_G004,18.75,74.0,2.2724,9130.46,97.48,1258,2760,3,0,214

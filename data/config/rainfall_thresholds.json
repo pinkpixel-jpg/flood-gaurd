@@ -1,0 +1,41 @@
+{
+  "categories": [
+    {
+      "name": "Dry",
+      "min_mm": 0.0,
+      "max_mm": 0.0,
+      "description": "No rainfall"
+    },
+    {
+      "name": "Light",
+      "min_mm": 0.0,
+      "max_mm": 15.5,
+      "is_exclusive_min": true,
+      "description": "Very light to light rainfall (up to 15.5 mm/day)"
+    },
+    {
+      "name": "Moderate",
+      "min_mm": 15.5,
+      "max_mm": 64.4,
+      "is_exclusive_min": true,
+      "description": "Moderate rainfall (15.6 to 64.4 mm/day)"
+    },
+    {
+      "name": "Heavy",
+      "min_mm": 64.4,
+      "max_mm": 115.5,
+      "is_exclusive_min": true,
+      "description": "Heavy rainfall (64.5 to 115.5 mm/day)"
+    },
+    {
+      "name": "Extreme",
+      "min_mm": 115.5,
+      "max_mm": 10000.0,
+      "is_exclusive_min": true,
+      "description": "Very heavy to extremely heavy rainfall (> 115.5 mm/day)"
+    }
+  ],
+  "heavy_rainfall_threshold_mm": 64.4,
+  "extreme_event_threshold_mm": 115.5,
+  "source": "India Meteorological Department (IMD) daily gridded rainfall classifications"
+}

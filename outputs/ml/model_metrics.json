@@ -1,0 +1,118 @@
+{
+  "spearman_if_vs_rainfall7d": 0.7435756937994988,
+  "spearman_if_vs_baseline_on_events": 0.7999999999999999,
+  "flag_counts": {
+    "top1pct": 0,
+    "top5pct": 0,
+    "top10pct": 1
+  },
+  "model_card": {
+    "n_rows": 16072,
+    "features": [
+      "rainfall_1d",
+      "rainfall_3d",
+      "rainfall_7d",
+      "rainfall_14d",
+      "rainfall_30d",
+      "rainfall_anomaly_mm",
+      "monthly_rainfall_to_date",
+      "monsoon_rainfall_to_date",
+      "river_level_available",
+      "river_level_daily_mean_m",
+      "river_level_daily_max_m",
+      "elevation_mean_m",
+      "elevation_min_m",
+      "elevation_max_m",
+      "slope_mean_deg",
+      "slope_min_deg",
+      "slope_max_deg",
+      "built_up_pct",
+      "vegetation_pct",
+      "water_cover_pct",
+      "distance_to_nearest_waterway_m",
+      "waterway_length_m",
+      "distance_to_nearest_drainage_m",
+      "drainage_length_m"
+    ],
+    "dynamic_features": [
+      "rainfall_1d",
+      "rainfall_3d",
+      "rainfall_7d",
+      "rainfall_14d",
+      "rainfall_30d",
+      "rainfall_anomaly_mm",
+      "monthly_rainfall_to_date",
+      "monsoon_rainfall_to_date",
+      "river_level_daily_mean_m",
+      "river_level_daily_max_m"
+    ],
+    "static_features": [
+      "elevation_mean_m",
+      "elevation_min_m",
+      "elevation_max_m",
+      "slope_mean_deg",
+      "slope_min_deg",
+      "slope_max_deg",
+      "built_up_pct",
+      "vegetation_pct",
+      "water_cover_pct",
+      "distance_to_nearest_waterway_m",
+      "waterway_length_m",
+      "distance_to_nearest_drainage_m",
+      "drainage_length_m"
+    ],
+    "derived_indicators": [
+      "river_level_available"
+    ],
+    "forbidden_features_verified_absent": [
+      "flood_event_active",
+      "road_density"
+    ],
+    "missing_policy": {
+      "monsoon_rainfall_to_date": "fill_zero_outside_season (Jan-May: 0 mm monsoon accumulation is physically true by definition)",
+      "river_level_daily_mean_m": "indicator + training-period median (CWC absent before Feb-2022; zero metres is a REAL level so never fill with 0)",
+      "river_level_daily_max_m": "indicator + training-period median",
+      "rainfall_anomaly_mm / hist-dependent": "training-period median for 2015 rows (no prior-year baseline exists)",
+      "rolling rainfall edge NaNs": "training-period median (window-incomplete start-of-series only)"
+    },
+    "imputation_medians_train_fit": {
+      "rainfall_3d": 0.0,
+      "rainfall_7d": 0.3075682520866394,
+      "rainfall_14d": 4.196643829345703,
+      "rainfall_30d": 22.12388612795621,
+      "rainfall_anomaly_mm": -2.1127890083071303,
+      "river_level_daily_mean_m": 545.818,
+      "river_level_daily_max_m": 549.31
+    },
+    "train_period": [
+      "2015-01-01",
+      "2023-12-31"
+    ],
+    "eval_period": [
+      "2024-01-01",
+      "2025-12-31"
+    ],
+    "fit_rows_after_event_exclusion": 13056,
+    "model": "sklearn.ensemble.IsolationForest",
+    "params": {
+      "n_estimators": 300,
+      "contamination": 0.01,
+      "max_samples": "auto",
+      "random_state": 42,
+      "n_jobs": -1
+    },
+    "preprocessing": "no scaling (tree-based); training-fit median imputation; availability indicators",
+    "score_definition": "anomaly_score_raw = -(decision_function); higher = more anomalous",
+    "normalization": "global percentile rank across all 16072 rows scaled to 0-100",
+    "direction_check": {
+      "metric": "Spearman(anomaly_score_raw, rainfall_7d) on evaluation period",
+      "value": 0.702344160100936,
+      "expected_sign": "positive (higher score = more anomalous)"
+    },
+    "train_event_exclusion": "event days +/- 3 days removed from fit",
+    "artifacts": {
+      "scores": "outputs/ml\\anomaly_scores.csv"
+    }
+  },
+  "note": "Unsupervised anomaly detection; NOT a flood probability or official warning."
+}

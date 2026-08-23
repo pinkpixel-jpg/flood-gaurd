@@ -1,0 +1,86 @@
+{
+  "mode": "HISTORICAL_REPLAY",
+  "note": "Historical replay snapshot — NOT a live prediction",
+  "zones": {
+    "PUNE_G001": {
+      "date": "2025-12-31",
+      "risk_score": 38.28,
+      "risk_level": "LOW",
+      "risk_trend": "STABLE",
+      "components": {
+        "anomaly_score": 44.37,
+        "temporal_rainfall_signal": 23.79,
+        "vulnerability_score": 44.69
+      },
+      "data_status": "IMD daily rainfall OK; CWC river level UNAVAILABLE (missing, not zero)",
+      "mode": "HISTORICAL_REPLAY",
+      "key_signals": [
+        "ML anomaly 44/100 (percentile 44)",
+        "7-day rainfall percentile 24/100 (vs zone history, leak-safe)",
+        "vulnerability 44.7 (LOW)",
+        "river level unavailable (no CWC data for this cell/date)"
+      ],
+      "disclaimer": "Zone risk score (0-100). HISTORICAL REPLAY/DEMO only - NOT a live prediction, NOT a flood probability, NOT an official warning."
+    },
+    "PUNE_G002": {
+      "date": "2025-12-31",
+      "risk_score": 32.45,
+      "risk_level": "LOW",
+      "risk_trend": "STABLE",
+      "components": {
+        "anomaly_score": 33.86,
+        "temporal_rainfall_signal": 23.16,
+        "vulnerability_score": 41.07
+      },
+      "data_status": "IMD daily rainfall OK; CWC river level UNAVAILABLE (missing, not zero)",
+      "mode": "HISTORICAL_REPLAY",
+      "key_signals": [
+        "ML anomaly 34/100 (percentile 33)",
+        "7-day rainfall percentile 23/100 (vs zone history, leak-safe)",
+        "vulnerability 41.1 (LOW)",
+        "river level unavailable (no CWC data for this cell/date)"
+      ],
+      "disclaimer": "Zone risk score (0-100). HISTORICAL REPLAY/DEMO only - NOT a live prediction, NOT a flood probability, NOT an official warning."
+    },
+    "PUNE_G003": {
+      "date": "2025-12-31",
+      "risk_score": 42.39,
+      "risk_level": "MODERATE",
+      "risk_trend": "STABLE",
+      "components": {
+        "anomaly_score": 33.32,
+        "temporal_rainfall_signal": 24.13,
+        "vulnerability_score": 80.62
+      },
+      "data_status": "IMD daily rainfall OK; CWC river level UNAVAILABLE (missing, not zero)",
+      "mode": "HISTORICAL_REPLAY",
+      "key_signals": [
+        "ML anomaly 33/100 (percentile 33)",
+        "7-day rainfall percentile 24/100 (vs zone history, leak-safe)",
+        "vulnerability 80.6 (HIGH)",
+        "river level unavailable (no CWC data for this cell/date)"
+      ],
+      "disclaimer": "Zone risk score (0-100). HISTORICAL REPLAY/DEMO only - NOT a live prediction, NOT a flood probability, NOT an official warning."
+    },
+    "PUNE_G004": {
+      "date": "2025-12-31",
+      "risk_score": 36.99,
+      "risk_level": "LOW",
+      "risk_trend": "STABLE",
+      "components": {
+        "anomaly_score": 36.38,
+        "temporal_rainfall_signal": 23.87,
+        "vulnerability_score": 53.83
+      },
+      "data_status": "IMD daily rainfall OK; CWC river level UNAVAILABLE (missing, not zero)",
+      "mode": "HISTORICAL_REPLAY",
+      "key_signals": [
+        "ML anomaly 36/100 (percentile 36)",
+        "7-day rainfall percentile 24/100 (vs zone history, leak-safe)",
+        "vulnerability 53.8 (MODERATE)",
+        "river level unavailable (no CWC data for this cell/date)"
+      ],
+      "disclaimer": "Zone risk score (0-100). HISTORICAL REPLAY/DEMO only - NOT a live prediction, NOT a flood probability, NOT an official warning."
+    }
+  }
+}

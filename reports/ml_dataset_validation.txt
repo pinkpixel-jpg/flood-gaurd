@@ -1,0 +1,88 @@
+
+FLOOD LABEL MAPPING (verified events only):
+  event 256: 2014-04-19..2014-04-19 -> PUNE_G004 | rows labelled=0
+  event 260: 2014-08-05..2014-08-05 -> PUNE_G004 | rows labelled=0
+  event 60: 2015-06-23..2015-06-23 -> PUNE_G004 | rows labelled=1
+  event 61: 2015-07-20..2015-07-20 -> PUNE_G004 | rows labelled=1
+  event 177: 2016-07-01..2016-07-03 -> PUNE_G004 | rows labelled=3
+======================================================================
+FINAL DATASET VALIDATION
+======================================================================
+path                 : data/processed/pune_ml_dataset.csv
+rows x cols          : 16072 x 44
+date range           : 2015-01-01 .. 2025-12-31
+distinct dates       : 4018 (expected 4018)
+cells                : 4 -> {'PUNE_G001': 4018, 'PUNE_G002': 4018, 'PUNE_G003': 4018, 'PUNE_G004': 4018}
+duplicate Date+Grid  : 0
+complete 4018x4 grid : 16072 combos present | missing=0
+infinite values      : 0
+negative rainfall    : {'rainfall_1d': 0, 'rainfall_3d': 0, 'rainfall_7d': 0, 'rainfall_14d': 0, 'rainfall_30d': 0}
+
+MISSING VALUES PER COLUMN:
+  road_density                            16072 (100.0%)
+  river_level_daily_max_m                 13333 (83.0%)
+  river_level_daily_mean_m                13333 (83.0%)
+  cwc_stations_in_cell                    13333 (83.0%)
+  monsoon_rainfall_to_date                 6656 (41.4%)
+  rainfall_anomaly_mm                      1460 (9.1%)
+  month_clim_mean_prior_years_mm           1460 (9.1%)
+  hist_max_prior_years_mm                  1460 (9.1%)
+  hist_mean_prior_years_mm                 1460 (9.1%)
+  rainfall_30d                              116 (0.7%)
+  rainfall_14d                               52 (0.3%)
+  rainfall_7d                                24 (0.1%)
+  rainfall_3d                                 8 (0.0%)
+
+NUMERIC RANGES:
+  Latitude                               min=      18.500 max=      18.750 mean=    18.625
+  Longitude                              min=      73.750 max=      74.000 mean=    73.875
+  rainfall_3d                            min=       0.000 max=     230.145 mean=     7.247
+  rainfall_7d                            min=       0.000 max=     399.072 mean=    16.927
+  rainfall_14d                           min=       0.000 max=     661.387 mean=    33.914
+  rainfall_30d                           min=       0.000 max=     873.604 mean=    72.964
+  rainfall_1d                            min=       0.000 max=     129.695 mean=     2.415
+  monthly_rainfall_to_date               min=       0.000 max=     687.871 mean=    38.757
+  monsoon_rainfall_to_date               min=       0.000 max=    1754.800 mean=   535.368
+  month                                  min=       1.000 max=      12.000 mean=     6.523
+  hist_mean_prior_years_mm               min=       1.240 max=       4.829 mean=     2.372
+  hist_max_prior_years_mm                min=      31.198 max=     129.695 mean=    70.093
+  year                                   min=    2015.000 max=    2025.000 mean=  2020.000
+  month_clim_mean_prior_years_mm         min=       0.000 max=      22.189 mean=     2.372
+  rainfall_anomaly_mm                    min=      -4.829 max=     128.100 mean=     0.084
+  is_monsoon                             min=       0.000 max=       1.000 mean=     0.334
+  day                                    min=       1.000 max=      31.000 mean=    15.730
+  dayofyear                              min=       1.000 max=     366.000 mean=   183.137
+  elevation_mean_m                       min=     585.540 max=     652.250 mean=   618.720
+  elevation_min_m                        min=     502.000 max=     549.000 mean=   522.250
+  elevation_max_m                        min=     707.000 max=    1137.000 mean=   968.000
+  elevation_valid_px                     min=  365310.000 max=  810900.000 mean=577980.000
+  slope_mean_deg                         min=       3.152 max=       7.416 mean=     4.539
+  slope_min_deg                          min=       0.000 max=       0.000 mean=     0.000
+  slope_max_deg                          min=      38.869 max=      56.970 mean=    47.223
+  slope_valid_px                         min=  365310.000 max=  810900.000 mean=577980.000
+  built_up_pct                           min=       7.828 max=      25.563 mean=    18.543
+  vegetation_pct                         min=      39.636 max=      61.703 mean=    47.604
+  water_cover_pct                        min=       0.639 max=       2.140 mean=     1.187
+  cropland_pct                           min=      14.153 max=      50.011 mean=    30.778
+  lc_valid_px                            min= 4050000.000 max= 9000000.000 mean=6412500.000
+  distance_to_nearest_waterway_m         min=     113.710 max=    1292.760 mean=   628.917
+  waterway_length_m                      min=  121974.660 max=  363179.830 mean=199551.690
+  distance_to_nearest_drainage_m         min=    4581.500 max=   20104.430 mean= 11653.130
+  drainage_length_m                      min=       0.000 max=   22556.100 mean=  6786.827
+  flood_event_count_verified             min=       0.000 max=       5.000 mean=     1.250
+  river_level_daily_mean_m               min=     534.424 max=     567.864 mean=   549.512
+  river_level_daily_max_m                min=     536.670 max=     573.460 mean=   550.474
+  cwc_stations_in_cell                   min=       1.000 max=       2.000 mean=     1.344
+  flood_event_active                     min=       0.000 max=       1.000 mean=     0.000
+
+WATERWAY/DRAINAGE FEATURES (per cell, joined):
+           distance_to_nearest_waterway_m  waterway_length_m  distance_to_nearest_drainage_m  drainage_length_m
+Grid_ID                                                                                                        
+PUNE_G001                          113.71          363179.83                         4581.50            4591.21
+PUNE_G002                          763.90          190960.37                         7308.81           22556.10
+PUNE_G003                          345.30          122091.90                        14617.78               0.00
+PUNE_G004                         1292.76          121974.66                        20104.43               0.00
+
+road_density unique values     : [nan] (status=UNAVAILABLE)
+CWC river-level coverage rows  : 2739 / 16072 (17.0%)
+flood_event_active positives   : 5

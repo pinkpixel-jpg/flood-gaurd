@@ -1,0 +1,52 @@
+==================================================
+FINAL TRAINING DATASET - 10-POINT VALIDATION REPORT
+==================================================
+
+Validation Status: PASSED
+
+CHECK DETAILS:
+--------------------------------------------------
+1. Number of Cities: PASSED (Found 8, expected 8)
+2. Records per City: PASSED (Expected 4018 daily records each)
+     - Bengaluru: 4018 records
+     - Chennai: 4018 records
+     - Delhi: 4018 records
+     - Hyderabad: 4018 records
+     - Mumbai: 4018 records
+     - Nagpur: 4018 records
+     - Nashik: 4018 records
+     - Pune: 4018 records
+3. Date Range Check: PASSED (2015-01-01 to 2025-12-31)
+4. Core Columns Missingness: PASSED
+     - City: 0 missing values
+     - Date: 0 missing values
+     - Latitude: 0 missing values
+     - Longitude: 0 missing values
+     - Grid_Latitude: 0 missing values
+     - Grid_Longitude: 0 missing values
+     - Rainfall_mm: 0 missing values
+5. Duplicate Records Check: PASSED (Found 0 duplicates)
+6. Negative Rainfall Check: PASSED (Found 0 occurrences)
+7. Geographic Coordinate Validity: PASSED (Invalid City: 0, Invalid Grid: 0)
+8. Feature Missingness (NaN Counts): PASSED
+     - All lag and rolling columns contain the mathematically expected number of NaN values on start dates.
+9. Infinite Values Check: PASSED (Found 0 infinites)
+10. Column Data Type Consistency: PASSED
+     - City: PASSED
+     - Date: PASSED
+     - Latitude: PASSED
+     - Longitude: PASSED
+     - Grid_Latitude: PASSED
+     - Grid_Longitude: PASSED
+     - Rainfall_mm: PASSED
+     - Rainy_Day: PASSED
+     - Dry_Day: PASSED
+     - Year: PASSED
+     - Month: PASSED
+     - Day: PASSED
+     - DayOfYear: PASSED
+     - DayOfWeek: PASSED
+     - WeekOfYear: PASSED
+     - Is_Leap_Year: PASSED
+     - Is_Heavy_Rainfall: PASSED
+     - Is_Extreme_Event: PASSED

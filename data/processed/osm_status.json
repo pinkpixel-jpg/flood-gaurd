@@ -1,0 +1,23 @@
+{
+  "updated": "2026-08-22",
+  "roads": "UNAVAILABLE",
+  "roads_reason": "Overpass endpoints unreachable/timing out from this environment (connect timeout on overpass-api.de, HTTP 500/read timeout on kumi). No complete-Pune road dataset exists in project; central-Pune-only graphml/geojson present but NOT used as full coverage.",
+  "waterways": "OK",
+  "drainage": "OK",
+  "policy": {
+    "missing_representation": "NaN / UNKNOWN",
+    "never_zero_for_missing": true,
+    "blocks_other_layers": false
+  },
+  "files": {
+    "raw_waterways": "data/raw/osm/pune_waterways_raw.geojson",
+    "processed_waterways": "data/processed/pune_waterways.geojson",
+    "processed_drainage": "data/processed/pune_drainage.geojson",
+    "central_pune_only_graphml": [
+      "city_roads/pune_roads.graphml.xml",
+      "hehehackathon/city_roads/pune_roads.graphml.xml",
+      "hehehackathon/pune_roads.graphml"
+    ],
+    "central_pune_only_geojson_derived": "data/processed/pune_roads.geojson"
+  }
+}

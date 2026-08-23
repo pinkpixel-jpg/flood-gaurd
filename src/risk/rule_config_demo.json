@@ -1,0 +1,53 @@
+{
+  "status": "DEMO_ONLY_NOT_PRODUCTION",
+  "warning": "These EXAMPLE rules exist solely to exercise the scenario test framework. They are NOT production prevention rules and must be replaced by the teammate's reviewed rules.",
+  "rules": [
+    {
+      "rule_id": "RULE_DEMO_ESCALATE_HIGH_RISING",
+      "description": "Demo: escalation on high risk with rising trend",
+      "condition": {
+        "all": [
+          {"field": "risk_level", "op": "in", "value": ["HIGH", "CRITICAL"]},
+          {"field": "risk_trend", "op": "in", "value": ["INCREASING", "STRONGLY_INCREASING"]}
+        ]
+      },
+      "action": "[DEMO] Activate response-team standby and review site safety checklist",
+      "explanation": "[DEMO] High/elevated risk that is still rising warrants proactive preparedness"
+    },
+    {
+      "rule_id": "RULE_DEMO_MONITOR_MODERATE",
+      "description": "Demo: tighter monitoring on moderate stable risk",
+      "condition": {
+        "all": [
+          {"field": "risk_level", "op": "==", "value": "MODERATE"},
+          {"field": "risk_trend", "op": "in", "value": ["STABLE", null]}
+        ]
+      },
+      "action": "[DEMO] Increase observation frequency to twice daily",
+      "explanation": "[DEMO] Moderate but non-improving situations benefit from closer watch"
+    },
+    {
+      "rule_id": "RULE_DEMO_ROUTINE_LOW",
+      "description": "Demo: routine posture for low decreasing risk",
+      "condition": {
+        "all": [
+          {"field": "risk_level", "op": "==", "value": "LOW"},
+          {"field": "risk_trend", "op": "not_in", "value": ["INCREASING", "STRONGLY_INCREASING"]}
+        ]
+      },
+      "action": "[DEMO] Maintain routine monitoring schedule",
+      "explanation": "[DEMO] Low and non-rising conditions require no special measures"
+    },
+    {
+      "rule_id": "RULE_DEMO_HEAVY_RAIN_AWARENESS",
+      "description": "Demo: heavy single-day rainfall awareness modifier",
+      "condition": {
+        "all": [
+          {"field": "environmental_context.rainfall_1d", "op": ">=", "value": 75}
+        ]
+      },
+      "action": "[DEMO] Issue situational-awareness note to field staff",
+      "explanation": "[DEMO] Very heavy daily rainfall deserves explicit communication regardless of level band"
+    }
+  ]
+}

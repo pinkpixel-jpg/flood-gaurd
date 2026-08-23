@@ -1,0 +1,6 @@
+Date,Grid_ID,ml_anomaly_score_0_100,anomaly_percentile,rank_global,rank_in_grid,top1pct,top5pct,top10pct,baseline_rainfall7d_percentile,baseline_rank_global
+2015-06-23,PUNE_G004,82.94,82,2742,792,False,False,False,87.84,1931
+2015-07-20,PUNE_G004,56.55,56,6984,1981,False,False,False,64.12,5743
+2016-07-01,PUNE_G004,51.68,51,7767,2165,False,False,False,71.63,4536
+2016-07-02,PUNE_G004,71.81,71,4532,1301,False,False,False,74.31,4105
+2016-07-03,PUNE_G004,91.74,91,1328,373,False,False,True,83.75,2588

@@ -1,0 +1,220 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Map â€” FloodGuard Pune</title>
+<meta name="description" content="Ward-level flood risk board for Pune: sensors, river stages, ponding flags.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* live-map refinements — same palette, better structure */
+.gauge-list .gauge{background:rgba(34,48,58,.5);border:1px solid var(--line);
+  border-radius:12px;padding:12px 16px;margin-bottom:10px}
+.gauge-list .form-note{padding:8px 2px 0}
+.feed-row{display:block;background:rgba(34,48,58,.45);
+  border:1px solid var(--line);border-radius:12px;
+  padding:12px 14px;margin-bottom:10px}
+.feed-msg{display:block;margin-top:4px;line-height:1.45}
+#fg-map-detail .fg-kv{padding:8px 0;display:flex;justify-content:space-between;align-items:center}
+#fg-map-detail .fg-kv span{color:var(--ink-dim);font-size:.85rem}
+#fg-map-detail .fg-kv b{font-size:.95rem}
+#fg-map-detail h4{margin:18px 0 6px;color:#FFD166;
+  font-family:'IBM Plex Mono',monospace;font-size:.75rem;letter-spacing:.1em;
+  text-transform:uppercase;padding-bottom:6px;border-bottom:1px solid var(--line)}
+#fg-map-detail h4:first-of-type{margin-top:4px}
+#fg-map-detail .detail-section{margin-bottom:4px}
+#fg-map-detail .check-list{margin-top:6px}
+#fg-map-detail .check-item{padding:5px 0;border-bottom:1px solid var(--line-soft)}
+#fg-map-detail .check-item:last-child{border-bottom:none}
+#fg-map-detail .check-txt{font-size:.88rem;line-height:1.5}
+#fg-map-detail .panel-head{padding:16px 20px 12px}
+#fg-map-detail .panel-head h3{font-size:1.2rem;margin:0}
+.map-zone{transition:opacity .25s ease;cursor:pointer}
+.map-zone:hover .halo{opacity:.9}
+.map-zone:hover .core{stroke-width:2.5}
+</style>
+</head>
+<body data-page="live-map">
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div id="curtain"><span class="curtain-mark mono">FloodGuard · Pune</span></div>
+
+<div class="bg-stack" aria-hidden="true">
+  <canvas id="bg3d"></canvas>
+  <div class="bg-grid"></div>
+  <div class="vignette"></div>
+</div>
+
+<header class="site-header">
+  <a class="brand" href="index.html" aria-label="FloodGuard home">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 100 128"><path d="M50 4 C58 26 90 54 90 84 A40 40 0 1 1 10 84 C10 54 42 26 50 4 Z" fill="none" stroke="#FFD166" stroke-width="7"/></svg>
+    </span>
+    <span>
+      <span class="brand-name">Flood<b>Guard</b></span>
+      <span class="brand-sub mono">Pune · Flood Intelligence</span>
+    </span>
+  </a>
+  <nav class="nav-links" aria-label="Primary">
+    <a class="nav-link" href="live-map.html" aria-current="page">Live Map</a>
+    <a class="nav-link" href="analyze.html">Analyze Risk</a>
+    <a class="nav-link" href="why.html">Why</a>
+    <a class="nav-link" href="forecast.html">Forecast</a>
+    <a class="nav-link" href="routes.html">Routes</a>
+    <a class="nav-link" href="actions.html">Actions</a>
+    <a class="nav-link" href="history.html">History</a>
+    <a class="nav-link nav-cta" href="alerts.html">Alerts</a>
+  </nav>
+</header>
+
+<main id="main">
+
+  <section class="page-hero">
+    <p class="crumb mono" data-reveal><a href="index.html">Home</a> / 01 â€” Live Map</p>
+    <h1 data-reveal>The city,<br>right <em>now</em>.</h1>
+    <p class="lede" data-reveal>A fused view of rain, rivers and streets. Risk is colour-coded per zone â€” pale sand is normal, high-vis yellow means watch, red-orange marks active flood risk.</p>
+  </section>
+  <hr class="page-rule">
+
+  <div class="content-wrap">
+    <section class="grid-2">
+      <div class="panel reveal-block">
+        <div class="panel-head">
+          <h3>Ward risk board</h3>
+          <span class="pill pill-live pill-hi">Live · updated <span id="clock" class="js-clock">--:--:--</span></span>
+        </div>
+        <div class="map-board">
+          <svg class="map-art" viewBox="0 0 800 520" role="img" aria-label="Stylised map of Pune with river network and risk zones">
+            <defs>
+              <radialGradient id="mapFade" cx=".5" cy=".45" r=".75">
+                <stop offset="0%" stop-color="#2A3841"/>
+                <stop offset="100%" stop-color="#22303A"/>
+              </radialGradient>
+            </defs>
+            <rect width="800" height="520" fill="url(#mapFade)"/>
+            <g stroke="rgba(202,210,197,.06)">
+              <line x1="0" y1="65" x2="800" y2="65"/><line x1="0" y1="130" x2="800" y2="130"/>
+              <line x1="0" y1="195" x2="800" y2="195"/><line x1="0" y1="260" x2="800" y2="260"/>
+              <line x1="0" y1="325" x2="800" y2="325"/><line x1="0" y1="390" x2="800" y2="390"/>
+              <line x1="0" y1="455" x2="800" y2="455"/>
+              <line x1="80" y1="0" x2="80" y2="520"/><line x1="160" y1="0" x2="160" y2="520"/>
+              <line x1="240" y1="0" x2="240" y2="520"/><line x1="320" y1="0" x2="320" y2="520"/>
+              <line x1="400" y1="0" x2="400" y2="520"/><line x1="480" y1="0" x2="480" y2="520"/>
+              <line x1="560" y1="0" x2="560" y2="520"/><line x1="640" y1="0" x2="640" y2="520"/>
+              <line x1="720" y1="0" x2="720" y2="520"/>
+            </g>
+            <path class="map-road" d="M60,470 L240,380 L430,330 L640,300 L770,250"/>
+            <path class="map-road" d="M120,60 L200,220 L260,360 L340,480"/>
+            <path class="map-road" d="M700,90 L600,210 L540,350 L560,480"/>
+            <path class="map-river thin" d="M120,40 C180,120 170,190 230,240 C290,290 300,340 280,420"/>
+            <path class="map-river" d="M40,300 C140,270 260,285 370,265 C480,245 560,255 660,235 C720,222 760,225 800,215"/>
+            <path class="map-river" d="M370,265 C400,320 470,350 560,365 C620,375 680,395 730,440"/>
+            <text class="map-label" x="52" y="292">Mula</text>
+            <text class="map-label" x="596" y="398">Mutha â†“</text>
+            <text class="map-label" x="238" y="52">Indrayani</text>
+            <g class="map-zone risk-low" data-grid="PUNE_G003"><circle class="halo" cx="180" cy="150" r="20"/><circle class="core" cx="180" cy="150" r="8"/></g>
+                                    <g class="map-zone risk-med" data-grid="PUNE_G001"><circle class="halo" cx="300" cy="300" r="22"/><circle class="core" cx="300" cy="300" r="9"/></g>
+            <g class="map-zone risk-med" data-grid="PUNE_G002"><circle class="halo" cx="600" cy="290" r="22"/><circle class="core" cx="600" cy="290" r="9"/></g>
+                        <g class="map-zone risk-high" data-grid="PUNE_G004"><circle class="halo" cx="560" cy="372" r="24"/><circle class="core" cx="560" cy="372" r="11"/></g>
+            <text class="map-label" x="436" y="264">North-East Pune</text>
+            <text class="map-label" x="576" y="386">East Pune</text>
+            <text class="map-label" x="150" y="132">North-West Pune</text>
+            <text class="map-label" x="316" y="292">West-Central Pune</text>
+          </svg>
+        </div>
+        <div id="fg-map-detail" class="panel" style="margin-top:18px">
+          <p class="form-note">Click a zone dot above to see its full details here.</p>
+        </div>
+        <div class="map-legend">
+          <span class="legend-key low"><i></i>Normal</span>
+          <span class="legend-key med"><i></i>Watch</span>
+          <span class="legend-key high"><i></i>Flood risk</span>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="panel reveal-block">
+          <div class="panel-head">
+            <h3>River &amp; street gauges</h3>
+            <span class="pill">% of alert threshold</span>
+          </div>
+          <div class="gauge-list">
+            <div class="gauge">
+              <span class="gauge-name">Khadakwasla release stage</span>
+              <span class="gauge-val status-chip">Steady</span>
+              <div class="gauge-sub">
+                <div class="gauge-track"><div class="gauge-fill" style="--v:58"></div></div>
+                <span class="gauge-val">58%</span>
+              </div>
+            </div>
+            <div class="gauge warn">
+              <span class="gauge-name">Bopodi river gauge</span>
+              <span class="gauge-val status-chip">Rising</span>
+              <div class="gauge-sub">
+                <div class="gauge-track"><div class="gauge-fill" style="--v:81"></div></div>
+                <span class="gauge-val">81%</span>
+              </div>
+            </div>
+            <div class="gauge">
+              <span class="gauge-name">Aundh drain capacity</span>
+              <span class="gauge-val status-chip">Normal</span>
+              <div class="gauge-sub">
+                <div class="gauge-track"><div class="gauge-fill" style="--v:34"></div></div>
+                <span class="gauge-val">34%</span>
+              </div>
+            </div>
+            <div class="gauge danger">
+              <span class="gauge-name">Kharadi underpass ponding</span>
+              <span class="gauge-val status-chip">Closed</span>
+              <div class="gauge-sub">
+                <div class="gauge-track"><div class="gauge-fill" style="--v:100"></div></div>
+                <span class="gauge-val">11 cm</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel reveal-block">
+          <div class="panel-head">
+            <h3>Sensor feed</h3>
+            <span class="pill">Mesh stream</span>
+          </div>
+          <div class="feed" id="feedList">
+            <div class="feed-row">
+              <span class="feed-time">--:--:--</span>
+            <div class="feed-row">
+              <span class="feed-time">--:--:--</span>
+              <span class="feed-msg"><strong>INFO</strong> — Loading zone risk from FloodGuard backend…</span>
+            </div>
+            <div class="feed-row">
+            <div class="feed-row">
+    </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-base" style="max-width:none">
+    <span class="mono">Â© <span class="js-year">2026</span> FloodGuard AI · Pune</span>
+    <nav class="footer-nav mono" aria-label="Footer">
+      <a href="index.html">Home</a>
+      <a href="forecast.html">Forecast</a>
+      <a href="routes.html">Routes</a>
+      <a href="alerts.html">Alerts</a>
+    </nav>
+</footer>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/pages.js"></script>
+<script src="js/background.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+# Secrets & local configuration
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Data caches (large)
+cache/
+
+# Large binary files
+*.tif
+*.tiff
+*.zip
+*.gpkg
+*.nc
+*.xml
+*.err.log
+*.log
+
+# Large data files (>1MB)
+data/raw/
+data/processed/pune_ml_dataset.csv
+data/processed/pune_roads.geojson
+data/processed/pune_elevation.tif
+data/processed/pune_landcover.tif
+data/processed/pune_slope.tif
+data/processed/pune_drainage.geojson
+data/processed/pune_waterways.geojson
+data/processed/city_elevation.csv
+data/processed/multi_city_rainfall_2015_2025.csv
+data/processed/rainfall_base_2015_2025.csv
+data/processed/rainfall_training_dataset_2015_2025.csv
+data/processed/pune/pune_training_dataset.csv
+data/processed/pune/pune_training_dataset_2015_2025.csv
+data/processed/pune/pune_grid_elevation.csv
+outputs/risk/historical_risk_scores.csv
+outputs/risk/environmental_scores.csv
+outputs/vulnerability/proxy_training_grid.csv
+outputs/ml/anomaly_scores.csv
+
+# Duplicate/heavy folders
+hehehackathon/
+python_folder/
+city_roads/
+city_waterways/
+rule_based_reference/
+
+# OS noise
+Thumbs.db
+.DS_Store
