@@ -1,138 +1,319 @@
-# Rainfall Intelligence: Dataset Preparation (Level 1 & Level 2)
+# FloodGuard AI — Pune Flood Decision Support Platform
 
-A professional, configuration-driven time-series and geospatial data preparation pipeline. It ingests historical India Meteorological Department (IMD) daily gridded rainfall NetCDF datasets (2015–2025) and builds cleaned, validated, feature-engineered datasets.
-
----
-
-## 1. Dual-Level Pipeline Architecture
-
-The pipeline supports two levels of dataset outputs:
-
-### LEVEL 1 — Multi-City Dataset (Scalability & Comparison)
-*   **Purpose**: Cross-city rainfall profiling and validation.
-*   **Cities**: Pune, Mumbai, Nashik, Nagpur, Bengaluru, Delhi, Chennai, Hyderabad.
-*   **Extraction**: Mapped to the nearest land-masked valid grid coordinate.
-*   **Feature Grouping**: Performed on column `City` to prevent cross-city leakage.
-
-### LEVEL 2 — Hyperlocal Pune Spatial Dataset (Flood Risk & GIS Mapping)
-*   **Purpose**: Spatially localized modeling for urban waterlogging and flood warning systems in Pune.
-*   **Bounding Box**: Configurable in `data/config/pune_bbox.json`:
-    - Latitude: 18.30 to 18.75
-    - Longitude: 73.60 to 74.10
-*   **Grid Cells**: Preserves all 4 IMD cells within Pune's bounding box as separate time-series:
-    - `PUNE_01`: (18.50° N, 73.75° E) — matches Level 1 Pune grid location.
-    - `PUNE_02`: (18.50° N, 74.00° E)
-    - `PUNE_03`: (18.75° N, 73.75° E)
-    - `PUNE_04`: (18.75° N, 74.00° E)
-*   **Feature Grouping**: Performed on column `Grid_ID` to prevent cross-grid leakage.
+A hyperlocal flood intelligence system for Pune city that fuses machine learning, rule-based prevention, environmental monitoring, and real-time alert delivery into a single operational dashboard. Built for the **Smart India Hackathon 2026**.
 
 ---
 
-## 2. Directory Structure
+## System Architecture
 
 ```
-hackathon/
-│
-├── data/
-│   ├── config/
-│   │   ├── cities.csv                      # Level 1 city coordinates list
-│   │   ├── pune_bbox.json                  # Level 2 bounding box config
-│   │   └── rainfall_thresholds.json        # IMD rainfall category thresholds
-│   ├── raw/
-│   │   ├── imd/                            # Raw NetCDF files (2015-2025)
-│   │   └── elevation/                      # SRTM elevation files (optional geotiff)
-│   ├── intermediate/
-│   └── processed/
-│       ├── multi_city_rainfall_2015_2025.csv # Level 1 final training dataset
-│       ├── rainfall_base_2015_2025.csv       # Level 1 base extracted dataset
-│       ├── rainfall_training_dataset_2015_2025.csv # Level 1 duplicate check copy
-│       ├── yearly_rainfall_statistics.csv    # Level 1 annual stats
-│       ├── monthly_rainfall_statistics.csv   # Level 1 monthly stats
-│       ├── city_elevation.csv                # Level 1 elevation stats
-│       │
-│       └── pune/                             # LEVEL 2 (PUNE HYPERLOCAL)
-│           ├── pune_spatial_rainfall_2015_2025.csv # Base grid * date observations
-│           ├── pune_grid_metadata.csv        # Stable cell coordinate lookup
-│           ├── pune_grid_elevation.csv       # Extracted heights per Grid_ID
-│           ├── pune_grid_statistics.csv      # Cell-wise long-term metrics
-│           ├── pune_historical_flood_events.csv # Placeholder flood events schema
-│           └── pune_training_dataset.csv     # Final feature-engineered spatial dataset
-│
+┌─────────────────────────────────────────────────────────────────┐
+│                     FLOODGUARD AI — PUNE                         │
+├─────────────┬──────────────┬──────────────┬─────────────────────┤
+│  MODULE 1   │   MODULE 2   │   MODULE 3   │      MODULE 4       │
+│ Vulnerability│  Live Risk   │  Prevention  │  Environmental      │
+│ (XGBoost+   │ (Isolation   │  (Rule-based │  (Heat + Water      │
+│  SHAP)      │  Forest)     │   Engine)    │   Deficit)          │
+├─────────────┴──────────────┴──────────────┴─────────────────────┤
+│                    MODULE 5 — DELIVERY LAYER                     │
+│         FastAPI Backend  ·  Dual Alert System  ·  ViaSocket      │
+├─────────────────────────────────────────────────────────────────┤
+│                      FRONTEND (HTML/CSS/JS)                      │
+│   Live Map  ·  Analyze Risk  ·  Forecast  ·  Alerts  ·  Routes  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Modules
+
+### Module 1 — Vulnerability Index (XGBoost + SHAP)
+
+Computes a transparent, explainable vulnerability score (0–100) for each of Pune's 4 IMD grid cells using geospatial features.
+
+| Component | Detail |
+|---|---|
+| **Target** | `hydrologic_vulnerability_proxy` — rule: distance-to-drainage ≤ 700m AND elevation < 35th percentile |
+| **Model** | XGBoost classifier (tree-based, fast inference) |
+| **Explainability** | SHAP (SHapley Additive exPlanations) — per-zone factor contributions |
+| **Output** | Vulnerability score, level (LOW/MODERATE/HIGH/CRITICAL), ranked contributing factors |
+| **Data** | Drainage distance, elevation, slope, land cover, road density, river proximity |
+
+### Module 2 — Live Risk Assessment (Isolation Forest)
+
+Real-time anomaly-based risk scoring using the frozen Isolation Forest model on verified IMD rainfall data.
+
+| Component | Detail |
+|---|---|
+| **Model** | Isolation Forest (unsupervised anomaly detection) |
+| **Weights** | Anomaly 45% + Temporal Rainfall 30% + Vulnerability 25% |
+| **Trend** | 7-day rolling window — RISING / STABLE / FALLING |
+| **Levels** | LOW (<30) / MODERATE (30–59) / HIGH (60–79) / CRITICAL (≥80) |
+| **Frozen** | Model outputs pre-computed — no runtime retraining |
+
+### Module 3 — Prevention Engine (Rule-Based)
+
+Context-aware action recommendations based on risk level, vulnerability, citizen reports, and environmental conditions.
+
+| Feature | Detail |
+|---|---|
+| **Rules** | 15+ conditional rules with priority escalation |
+| **Inputs** | Risk level, vulnerability score, citizen reports, environmental data |
+| **Output** | Priority level, recommended actions, operational checklist, rule trace |
+| **Citizen Reports** | Public can submit incident reports that escalate prevention priority |
+
+### Module 4 — Environmental Proxies (Heat + Water Deficit)
+
+Supplementary environmental context using IMD gridded temperature and rainfall data.
+
+| Feature | Detail |
+|---|---|
+| **Heat Score** | Max temperature percentile (high heat = infrastructure stress) |
+| **Water Deficit** | Cumulative rainfall deficit against long-term mean |
+| **Data Source** | IMD gridded daily datasets (2015–2025) |
+| **Fallback** | UNAVAILABLE when data is missing — never fabricated |
+
+### Module 5 — Delivery Layer
+
+FastAPI backend with role-based access control and dual alert delivery system.
+
+| Feature | Detail |
+|---|---|
+| **Backend** | FastAPI (Python) — 20+ REST API endpoints |
+| **Auth** | PUBLIC (citizen) and MUNICIPAL (disaster management) roles |
+| **Alerts** | Dual-channel: Public (reassuring) + Municipal (operational) |
+| **ViaSocket** | Webhook integration for email delivery |
+| **Storage** | SQLite for citizen reports, public alerts, municipal alerts |
+
+---
+
+## Frontend Pages
+
+| Page | Description |
+|---|---|
+| **Live Map** | Real-time zone risk visualization with SVG map, river gauge telemetry, click-to-detail panels |
+| **Analyze Risk** | Full 4-module risk analysis workflow — zone selector, date picker, comprehensive results |
+| **Forecast** | 365-day forecast support with pre-computed August 2026 monsoon data |
+| **Actions** | Prevention recommendations with rule traces and checklists |
+| **Routes** | Safe routing advisory (dataset-dependent, currently UNAVAILABLE) |
+| **History** | Verified historical flood events (2014–2026 archive) |
+| **Why** | Vulnerability explanation — Module 1 breakdown with SHAP factors |
+| **Alerts** | Role-gated: PUBLIC sees alerts, MUNICIPAL sees send controls + internal alerts |
+
+---
+
+## Zone Coverage
+
+Pune is divided into 4 IMD grid cells covering the entire city area:
+
+| Grid ID | Zone Name | Area |
+|---|---|---|
+| PUNE_G001 | West-Central Pune | Kothrud, Karve Nagar, Warje |
+| PUNE_G002 | East Pune | Hadapsar, Kharadi, Wagholi |
+| PUNE_G003 | North-West Pune | Baner, Balewadi, Aundh |
+| PUNE_G004 | North-East Pune | Yerwada, Kalyani Nagar, Viman Nagar |
+
+---
+
+## Alert System
+
+### Public Alerts (Citizen-Facing)
+- **Tone**: Reassuring, action-oriented, no panic-inducing language
+- **Trigger**: Risk level ≥ HIGH or level change
+- **Delivery**: ViaSocket webhook → Email
+- **Example**: "FloodGuard Alert — West-Central Pune. Elevated risk today. Please be cautious."
+
+### Municipal Internal Alerts (Operations)
+- **Tone**: Direct, blunt, operational with exact numbers
+- **Trigger**: Same as public, sent independently
+- **Delivery**: ViaSocket webhook → Email
+- **Example**: "ZONE ALERT: West-Central Pune (PUNE_G001). HIGH risk — waterlogging probable."
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Backend** | Python, FastAPI, Uvicorn |
+| **ML** | XGBoost, Isolation Forest, SHAP, scikit-learn, pandas |
+| **Data** | IMD NetCDF rainfall, SRTM elevation, OSM drainage/roads/waterways |
+| **Frontend** | HTML5, CSS3, Vanilla JavaScript (no framework) |
+| **3D Rendering** | Three.js (terrain/rain background) |
+| **Animations** | anime.js, GSAP, ScrollTrigger |
+| **Smooth Scroll** | Lenis |
+| **Storage** | SQLite (alerts, reports), CSV (frozen ML outputs) |
+| **Alerts** | ViaSocket webhook (HTTP POST) |
+| **Testing** | Python unittest (55 integration + 13 validation tests) |
+
+---
+
+## Quick Start
+
+### Prerequisites
+- Python 3.10+
+- pip
+
+### 1. Install Dependencies
+```bash
+pip install fastapi uvicorn pandas numpy xgboost scikit-learn shap requests
+```
+
+### 2. Start the System
+```bash
+# Double-click FloodGuard.bat (Windows)
+# OR manually:
+
+# Backend (port 8000)
+python -m uvicorn src.delivery.api:app --host 127.0.0.1 --port 8000
+
+# Frontend (port 8080)
+cd frontend
+python -m http.server 8080
+```
+
+### 3. Open in Browser
+```
+http://localhost:8080
+```
+
+### Demo Login
+| Role | Username | Password |
+|---|---|---|
+| PUBLIC | `citizen` | `citizen-demo` |
+| MUNICIPAL | `municipal` | `municipal-demo` |
+
+---
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/health` | Backend health check |
+| GET | `/api/zones?date=` | All 4 zone summaries |
+| GET | `/api/zones/{grid_id}?date=&citizen_reports=` | Single zone detail |
+| GET | `/api/risk/{grid_id}?date=` | Live risk assessment |
+| GET | `/api/vulnerability/{grid_id}` | Vulnerability index |
+| GET | `/api/prevention/{grid_id}?date=&citizen_reports=` | Prevention recommendations |
+| GET | `/api/environment/{grid_id}?date=` | Environmental scores |
+| POST | `/api/risk/analyze` | Full 4-module analysis |
+| POST | `/api/reports` | Submit citizen report |
+| GET | `/api/reports?grid_id=` | List citizen reports |
+| POST | `/api/alerts/generate` | Generate + deliver alerts via ViaSocket |
+| GET | `/api/alerts/public?date=` | Public alerts for date |
+| GET | `/api/alerts/municipal?date=` | Municipal alerts for date |
+| POST | `/api/auth/public/login` | PUBLIC login |
+| POST | `/api/auth/municipal/login` | MUNICIPAL login |
+
+---
+
+## Data Provenance
+
+- **Rainfall**: IMD 0.25° daily gridded (2015–2025) — 11 years, 4 grid cells
+- **Elevation**: SRTM 30m GeoTIFF
+- **Drainage**: OpenStreetMap via Overpass API
+- **Waterways**: OpenStreetMap via Overpass API
+- **Roads**: OpenStreetMap via OSMnx
+- **Land Cover**: MODIS Terra + Aqua (2015–2025)
+
+### Frozen Dataset
+`data/processed/pune_ml_dataset.csv` — 16,072 rows, 4 grid cells × 4,018 days. This dataset is immutable during the hackathon.
+
+---
+
+## Running Tests
+
+```bash
+# Module 5 integration (55 tests)
+python tests/test_module5_integration.py
+
+# Module 2 live risk validation (13 tests)
+python tests/test_live_risk.py
+
+# Module 3 rule engine
+python tests/test_rule_engine.py
+
+# Module 4 heat + water
+python tests/test_heat_water.py
+
+# Module 1 vulnerability
+python tests/test_vulnerability.py
+```
+
+---
+
+## Project Structure
+
+```
+flood-gaurd/
+├── frontend/                  # HTML/CSS/JS frontend
+│   ├── index.html             # Entry point → redirects to login
+│   ├── login.html             # Auth page (PUBLIC/MUNICIPAL)
+│   ├── live-map.html          # Real-time zone risk map
+│   ├── analyze.html           # Full risk analysis workflow
+│   ├── forecast.html          # 365-day forecast
+│   ├── actions.html           # Prevention recommendations
+│   ├── history.html           # Historical flood events
+│   ├── why.html               # Vulnerability explanation
+│   ├── routes.html            # Safe routing
+│   ├── alerts.html            # Alert management (role-gated)
+│   ├── css/style.css          # Global styles
+│   └── js/
+│       ├── api.js             # API client + auth storage
+│       ├── pages.js           # Page data binding + routing
+│       ├── main.js            # Curtain transitions + reveals
+│       ├── background.js      # Three.js 3D terrain
+│       └── hero.js            # Intro animation
 ├── src/
-│   ├── data_loader.py                      # Config and NetCDF loaders
-│   ├── rainfall_extractor.py               # Spatial nearest-neighbor (land-masked)
-│   ├── pune_spatial_extractor.py           # BBox gridded cell extractor
-│   ├── data_cleaning.py                    # Cleaning validations & quality reporting
-│   ├── feature_engineering.py               # Temporal, lag, rolling features (group-aware)
-│   ├── elevation_extractor.py               # Samples heights from SRTM GeoTIFF
-│   ├── dataset_validator.py                # Final 10-point validation suite
-│   ├── build_dataset.py                    # Level 1 pipeline orchestrator
-│   └── pune_build_dataset.py               # Level 2 pipeline orchestrator
-│
-├── reports/
-│   ├── data_quality_report.csv             # Level 1 profile metrics
-│   ├── dataset_summary.txt                 # Level 1 quality report text
-│   ├── final_dataset_validation.txt        # Level 1 10-point check log
-│   ├── pune_validation.txt                 # Level 1 Pune validation log
-│   │
-│   └── pune_spatial_validation.txt         # LEVEL 2 PUNE SPATIAL VALIDATION LOG
-│
-└── outputs/
-    ├── datasets/
-    └── figures/
-        ├── annual_rainfall.png             # Level 1 annual total lines
-        ├── monthly_rainfall.png            # Level 1 monthly daily means
-        ├── rainfall_distribution.png       # Level 1 log intensity histograms
-        ├── pune_rainfall_heatmap.png       # Level 1 Pune Year x Month heatmap
-        ├── extreme_events.png              # Level 1 top event bar chart
-        │
-        ├── pune_grid_map.png               # Level 2 Grid cell scatter map
-        ├── pune_avg_rainfall_map.png       # Level 2 Average daily rainfall map
-        ├── pune_max_rainfall_map.png       # Level 2 Maximum daily rainfall map
-        ├── pune_annual_rainfall_trend.png  # Level 2 Annual total trends
-        ├── pune_monthly_rainfall_climatology.png # Level 2 Monthly daily means
-        ├── pune_heatmap.png                # Level 2 Heatmap (spatial average)
-        └── pune_extreme_events_spatial.png # Level 2 spatial extreme events list
+│   ├── delivery/
+│   │   ├── api.py             # FastAPI application (20+ endpoints)
+│   │   ├── aggregator.py      # Response formatting + role views
+│   │   └── citizen_reports.py # Citizen report CRUD
+│   ├── alerts/
+│   │   ├── generate.py        # Alert generation + ViaSocket delivery
+│   │   ├── store.py           # SQLite alert storage
+│   │   └── auth.py            # Role-based authentication
+│   ├── risk/
+│   │   ├── live_risk.py       # Isolation Forest risk scoring
+│   │   ├── rule_engine.py     # Prevention rule engine
+│   │   └── heat_water.py      # Environmental proxies
+│   ├── vulnerability/
+│   │   ├── vulnerability_index.py  # XGBoost vulnerability
+│   │   ├── shap_explainer.py       # SHAP explanations
+│   │   └── xgboost_predict.py      # Model inference
+│   ├── ml/
+│   │   ├── anomaly_model.py   # Isolation Forest training
+│   │   └── feature_preparation.py
+│   └── integration/
+│       └── viasocket_client.py # ViaSocket HTTP client
+├── data/
+│   ├── processed/             # Cleaned datasets
+│   ├── raw/                   # IMD NetCDF, SRTM elevation
+│   └── config/                # Pipeline configuration
+├── outputs/
+│   ├── vulnerability/         # XGBoost model + SHAP plots
+│   ├── ml/                    # Anomaly scores + metrics
+│   ├── risk/                  # Risk scores
+│   └── forecast/              # Pre-computed forecasts
+├── tests/                     # 68 test cases
+├── docs/                      # Module documentation
+├── reports/                   # Validation reports
+└── FloodGuard.bat             # One-click launcher (Windows)
 ```
 
 ---
 
-## 3. Data Leakage Prevention
+## Key Design Decisions
 
-All rolling and lag features are shifted by 1 day before calculations to mathematically ensure that features for date $t$ only contain data from days $\le t-1$.
-- **Lags**: Lag 1D, 3D, 7D, 14D represent shifted historical daily metrics.
-- **Shifted Rolling**: rolling mean/sum (3D, 7D, 14D, 30D) are computed using `shift(1)` to prevent look-ahead leaks.
-- **Consecutive Dry Days**: counts consecutive dry days ending on date $t-1$.
-- **Peak Descriptors**: `Annual_Max_Rainfall` and `Monthly_Max_Rainfall` are descriptive columns for climate analysis and must **not** be fed to models during predictive training.
-
----
-
-## 4. Scientific Category Thresholds
-
-Categories are defined in `data/config/rainfall_thresholds.json` using the India Meteorological Department (IMD) daily thresholds:
-- **Dry**: $= 0.0$ mm
-- **Light**: $> 0.0$ mm and $\le 15.5$ mm
-- **Moderate**: $> 15.5$ mm and $\le 64.4$ mm
-- **Heavy**: $> 64.4$ mm and $\le 115.5$ mm
-- **Extreme**: $> 115.5$ mm
+1. **No fabrication**: Missing data is displayed as `UNAVAILABLE` — never zero or invented
+2. **Frozen ML**: Isolation Forest outputs are pre-computed; no runtime retraining
+3. **Transparency**: Every vulnerability score comes with SHAP explanations
+4. **Dual alerts**: Public citizens get reassuring messages; MUNICIPAL gets blunt operational data
+5. **Role-based access**: PUBLIC sees simplified views; MUNICIPAL gets full operational dashboard
+6. **Plain frontend**: No React/Vue/Angular — vanilla HTML/CSS/JS for zero build step
 
 ---
 
-## 5. Execution Instructions
+## License
 
-Ensure dependencies are installed:
-```bash
-pip install xarray netCDF4 pandas numpy matplotlib
-```
-
-To run the **Level 1 (8-City) Pipeline**:
-```bash
-python -m src.build_dataset
-```
-
-To run the **Level 2 (Pune Hyperlocal Spatial) Pipeline**:
-```bash
-python -m src.pune_build_dataset
-```
-
-This will run all filters, extract cells, compute features, perform validation verification, output datasets to `data/processed/pune/`, and write verification reports and figures.
+Built for Smart India Hackathon 2026. Internal use only.
